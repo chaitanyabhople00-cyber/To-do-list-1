@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Simple To-Do List</title>
+<style>
+  :root{font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;--card:#ffffff;--bg:#f4f6f8;--accent:#2563eb}
+  body{margin:0;background:var(--bg);color:#0f172a}
+  header{background:linear-gradient(90deg,#0ea5e9,#6366f1);color:white;padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-weight:700;font-size:20px}
+  main{max-width:900px;margin:28px auto;padding:18px}
+  .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  input[type=text], input[type=date], textarea{padding:10px;border-radius:8px;border:1px solid #e6e9ef;width:100%;box-sizing:border-box}
+  .row{display:flex;gap:8px}
+  .row > * {flex:1}
+  button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
+  .muted{color:#475569;font-size:13px}
+  .filters{display:flex;gap:8px;margin-top:10px}
+  .task-list{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .task{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;border:1px solid #eef2ff}
+  .task.completed{opacity:0.7;text-decoration:line-through;background:#f8fafc}
+  .task .title{font-weight:600}
+  .task .meta{font-size:12px;color:#475569}
+  .actions{margin-left:auto;display:flex;gap:8px}
+  .icon-btn{background:transparent;border:1px solid #e6e9ef;padding:6px;border-radius:8px;cursor:pointer}
+  footer{max-width:900px;margin:20px auto;text-align:center;color:#6b7280;font-size:13px}
+  @media(min-width:720px){ .grid-2{display:grid;grid-template-columns:1fr 320px;gap:12px} }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">My To-Do List</div>
+  <nav class="muted">Frontend • localStorage • Single file</nav>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Create a Task</h2>
+    <form id="taskForm" autocomplete="off">
+      <div class="grid-2">
+        <div>
+          <label class="muted">Title</label>
+          <input id="title" type="text" required placeholder="Task title (eg. Study chapter 5)" />
+        </div>
+        <div>
+          <label class="muted">Due date (optional)</label>
+          <input id="due" type="date" />
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label class="muted">Description</label>
+        <textarea id="desc" rows="3" placeholder="Short note..."></textarea>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+        <button type="submit">Add Task</button>
+        <div class="muted" style="font-size:13px">Saved locally in your browser.</div>
+      </div>
+    </form>
+  </section>
+
+  <section class="card" style="margin-top:16px">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <h2 style="margin:0">Tasks</h2>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <input id="search" type="text" placeholder="Search tasks..." style="width:220px" />
+        <select id="filter">
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+        </select>
+        <button id="exportBtn" class="icon-btn">Export JSON</button>
+        <button id="importBtn" class="icon-btn">Import</button>
+        <input id="importFile" type="file" accept="application/json" style="display:none" />
+      </div>
+    </div>
+
+    <div class="filters muted" style="margin-top:10px">
+      <div id="counts">0 tasks</div>
+    </div>
+
+    <div id="list" class="task-list"></div>
+    <div id="empty" class="muted" style="margin-top:12px">No tasks yet — add your first task above.</div>
+  </section>
+</main>
+
+<footer>Project for SIP Report — To-Do List • Save homepage screenshot for report</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // get elements
+  const form = document.getElementById('taskForm');
+  const title = document.getElementById('title');
+  const desc = document.getElementById('desc');
+  const due = document.getElementById('due');
+  const listEl = document.getElementById('list');
+  const empty = document.getElementById('empty');
+  const filter = document.getElementById('filter');
+  const search = document.getElementById('search');
+  const counts = document.getElementById('counts');
+  const exportBtn = document.getElementById('exportBtn');
+  const importBtn = document.getElementById('importBtn');
+  const importF
